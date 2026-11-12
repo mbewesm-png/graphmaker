@@ -1,8 +1,8 @@
-name: Build desktop apps
+name: Build apps and publish web
 on:
   workflow_dispatch:
   push: { tags: ['v*'] }
-permissions: { contents: write }
+permissions: { contents: write, pages: write, id-token: write }
 jobs:
   build:
     strategy:
@@ -17,6 +17,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
+      - name: Put web files in app/
+        shell: bash
+        run: mkdir -p app && cp index.html app.js stats.js import.js app/
       - run: npm install
       - run: node scripts-prebuild.js
       - run: ${{ matrix.cmd }}
@@ -33,3 +36,14 @@ jobs:
           files: |
             dist/*.exe
             dist/*.dmg
+  web:
+    runs-on: ubuntu-latest
+    environment: { name: github-pages, url: "${{ steps.d.outputs.page_url }}" }
+    steps:
+      - uses: actions/checkout@v4
+      - run: mkdir -p app && cp index.html app.js stats.js import.js app/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: app }
+      - id: d
+        uses: actions/deploy-pages@v4
