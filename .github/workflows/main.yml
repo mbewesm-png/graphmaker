@@ -9,9 +9,9 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            cmd: npx electron-builder --win
+            cmd: npx electron-builder --win --publish never
           - os: macos-latest
-            cmd: npx electron-builder --mac
+            cmd: npx electron-builder --mac --publish never
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
