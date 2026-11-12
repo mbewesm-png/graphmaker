@@ -1,0 +1,24 @@
+{
+  "name": "graph-maker",
+  "version": "1.0.0",
+  "description": "Graph Maker – plots, error bars and statistics from your spreadsheet",
+  "main": "main.js",
+  "author": "Graph Maker",
+  "scripts": {
+    "start": "electron .",
+    "prebuild": "node scripts-prebuild.js",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build": "electron-builder"
+  },
+  "devDependencies": { "electron": "^33.0.0", "electron-builder": "^25.1.8" },
+  "dependencies": { "xlsx": "0.18.5" },
+  "build": {
+    "appId": "com.graphmaker.app",
+    "productName": "Graph Maker",
+    "files": ["main.js", "app/**/*"],
+    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }, { "target": "portable", "arch": ["x64"] }] },
+    "mac": { "target": [{ "target": "dmg", "arch": ["arm64", "x64"] }], "category": "public.app-category.education", "identity": null },
+    "artifactName": "Graph-Maker-${version}-${os}-${arch}.${ext}"
+  }
+}
